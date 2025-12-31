@@ -1,6 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../style/login.css";
+
+axios.defaults.withCredentials = true;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +12,27 @@ const Login = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isFocusWithin, setIsFocusWithin] = useState(false);
   const loginRef = useRef(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const response = await axios.post("/api/auth/login/", {
+        email,
+        password,
+      });
+      if (response.data.user) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      }
+      setIsAuthenticated(true);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (err) {
+      setError("ایمیل یا رمز عبور اشتباه است");
+      setIsAuthenticated(false);
+    }
+  };
 
   const handleCancel = () => {
     setIsAuthenticated(false);
@@ -22,7 +46,7 @@ const Login = () => {
     setIsFocusWithin(true);
   };
 
-  const handleContainerBlur = () => {
+  const handleContainerBlur = (e) => {
     const next = e.relatedTarget;
     if (loginRef.current && next && loginRef.current.contains(next)) {
       return;
@@ -41,7 +65,7 @@ const Login = () => {
   const navigate = useNavigate();
   return (
     <div className="login-body w-full" dir="rtl">
-      <div className={`box`}>
+      <div className={`box ${isFocusWithin ? "active" : ""}`}>
         <div
           className="login"
           ref={loginRef}
@@ -63,16 +87,20 @@ const Login = () => {
                 {error}
               </div>
             )}
-            <form style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit} style={{ width: "100%" }}>
               <input
                 type="text"
                 name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="ایمیل خود را وارد کنید"
                 required
               />
               <input
                 type="password"
                 name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="رمز عبور"
                 aria-label="رمز عبور"
                 autoComplete="current-password"

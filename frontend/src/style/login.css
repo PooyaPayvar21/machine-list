@@ -6,7 +6,11 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #06080b;
+  background-image: radial-gradient(
+    circle farthest-corner at 50% 52.5%,
+    rgba(14, 53, 92, 1) 0%,
+    rgba(16, 14, 72, 1) 90%
+  );
 }
 
 @property --a {
@@ -74,7 +78,8 @@
   border: 8px solid #0f172a;
 }
 
-.box:hover {
+.box:hover,
+.box:focus-within {
   width: 450px;
   height: 500px;
 }
