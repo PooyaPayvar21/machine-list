@@ -90,6 +90,18 @@ CORS_ALLOWED_ORIGINS = [
     "https://cmms.pakchoob.ir",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5174",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:8000",
+    "http://css.pakchoob.ir",
+    "https://css.pakchoob.ir",
+]
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'machinlist.authentication.CustomJWTAuthentication',
